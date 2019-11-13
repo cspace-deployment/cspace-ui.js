@@ -72,7 +72,7 @@ const store = mockStore({
 
 const perms = Immutable.fromJS({
   report: {
-    data: 'RUL',
+    data: 'CRUL',
   },
 });
 
@@ -264,6 +264,7 @@ describe('ReportPage', function suite() {
             },
             size: 20,
             p: 0,
+            sort: 'name',
           },
         }));
 
@@ -313,6 +314,7 @@ describe('ReportPage', function suite() {
           recordType: 'report',
           searchQuery: {
             size: 20,
+            sort: 'name',
           },
         }));
 
@@ -329,6 +331,7 @@ describe('ReportPage', function suite() {
           searchQuery: {
             p: 0,
             size: 20,
+            sort: 'name',
             as: {
               value: 'another searchval',
               op: OP_CONTAIN,
@@ -382,6 +385,7 @@ describe('ReportPage', function suite() {
             },
             size: 20,
             p: 0,
+            sort: 'name',
           },
         }));
 
@@ -395,6 +399,7 @@ describe('ReportPage', function suite() {
           searchQuery: {
             size: 20,
             p: 0,
+            sort: 'name',
           },
         }));
 
@@ -421,7 +426,11 @@ describe('ReportPage', function suite() {
     const shallowRenderer = createRenderer();
 
     shallowRenderer.render(
-      <ReportPage match={match} openModal={openModal} />, context);
+      <ReportPage
+        match={match}
+        openModal={openModal}
+        perms={perms}
+      />, context);
 
     const result = shallowRenderer.getRenderOutput();
     const recordEditor = findWithType(result, RecordEditorContainer);

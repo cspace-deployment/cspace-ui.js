@@ -14,6 +14,7 @@ import SearchPanelContainer from '../../containers/search/SearchPanelContainer';
 import styles from '../../../styles/cspace-ui/AdminTab.css';
 
 import {
+  canCreate,
   canRead,
   disallowCreate,
   disallowDelete,
@@ -46,6 +47,7 @@ const getSearchDescriptor = () => Immutable.fromJS({
   recordType,
   searchQuery: {
     size: 20,
+    sort: 'name',
   },
 });
 
@@ -255,6 +257,8 @@ export default class ReportPage extends Component {
     let recordEditor;
 
     if (typeof normalizedCsid !== 'undefined' && normalizedCsid !== null) {
+      const isRunnable = canCreate(recordType, perms);
+
       // Temporarily disallow deleting or creating records.
 
       let restrictedPerms = perms;
@@ -269,7 +273,7 @@ export default class ReportPage extends Component {
           csid={normalizedCsid}
           recordType={recordType}
           perms={restrictedPerms}
-          onRunButtonClick={this.handleRunButtonClick}
+          onRunButtonClick={isRunnable ? this.handleRunButtonClick : undefined}
         />
       );
     }
@@ -277,6 +281,8 @@ export default class ReportPage extends Component {
     return (
       <div className={styles.common}>
         <SearchPanelContainer
+          collapsed={false}
+          collapsible={false}
           config={config}
           history={history}
           isFiltered={!!filterValue}

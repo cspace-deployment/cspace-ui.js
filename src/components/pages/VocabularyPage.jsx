@@ -20,7 +20,7 @@ const propTypes = {
   perms: PropTypes.instanceOf(Immutable.Map),
   filterDelay: PropTypes.number,
   readVocabularyItemRefs: PropTypes.func,
-  setAdminTab: PropTypes.func,
+  setToolTab: PropTypes.func,
 };
 
 const defaultProps = {
@@ -37,6 +37,7 @@ const getSearchDescriptor = () => Immutable.fromJS({
   recordType,
   searchQuery: {
     size: 20,
+    sort: 'displayName',
   },
 });
 
@@ -58,11 +59,11 @@ export default class VocabularyPage extends Component {
 
   componentDidMount() {
     const {
-      setAdminTab,
+      setToolTab,
     } = this.props;
 
-    if (setAdminTab) {
-      setAdminTab(recordType);
+    if (setToolTab) {
+      setToolTab(recordType);
     }
   }
 
@@ -118,7 +119,7 @@ export default class VocabularyPage extends Component {
     if (canRead(recordType, perms)) {
       const csid = item.get('csid');
 
-      history.replace(`/admin/${recordType}/${csid}`);
+      history.replace(`/tool/${recordType}/${csid}`);
     }
 
     // Prevent the default action.
@@ -241,6 +242,8 @@ export default class VocabularyPage extends Component {
       <div className={styles.common}>
         <div>
           <SearchPanelContainer
+            collapsed={false}
+            collapsible={false}
             config={config}
             history={history}
             isFiltered={!!filterValue}

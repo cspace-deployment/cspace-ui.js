@@ -169,6 +169,10 @@ export default (configContext) => {
             numberType: {
               [config]: {
                 messages: defineMessages({
+                  fullName: {
+                    id: 'field.collectionobjects_common.numberType.fullName',
+                    defaultMessage: 'Other number type',
+                  },
                   name: {
                     id: 'field.collectionobjects_common.numberType.name',
                     defaultMessage: 'Type',
@@ -3384,6 +3388,22 @@ export default (configContext) => {
                 props: {
                   source: 'collectionmethod',
                 },
+              },
+            },
+          },
+        },
+        fieldCollectionFeature: {
+          [config]: {
+            messages: defineMessages({
+              name: {
+                id: 'field.collectionobjects_common.fieldCollectionFeature.name',
+                defaultMessage: 'Field collection feature',
+              },
+            }),
+            view: {
+              type: TextInput,
+              props: {
+                multiline: true,
               },
             },
           },
