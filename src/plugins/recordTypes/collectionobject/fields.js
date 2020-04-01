@@ -453,7 +453,6 @@ export default (configContext) => {
                   defaultMessage: 'Brief description',
                 },
               }),
-              cloneable: ({ form }) => form !== 'photo',
               repeating: true,
               view: {
                 type: TextInput,
