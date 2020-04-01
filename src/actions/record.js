@@ -534,6 +534,8 @@ export const createNewRecord = (config, recordTypeConfig, vocabularyConfig, clon
   (dispatch, getState) => {
     let readClone;
 
+    const state = getState();
+
     if (cloneCsid) {
       const data = getRecordData(getState(), cloneCsid);
 
@@ -562,7 +564,8 @@ export const createNewRecord = (config, recordTypeConfig, vocabularyConfig, clon
           config,
           recordTypeConfig,
           cloneCsid,
-          stickyFields: getStickyFields(getState()),
+          stickyFields: getStickyFields(state),
+          form: getForm(state, recordTypeConfig.name),
         },
       }))
     );
@@ -610,6 +613,7 @@ export const createNewSubrecord = (
         cloneCsid,
         isDefault,
         stickyFields: getStickyFields(getState()),
+        form: getForm(getState()),
       },
     }))
   );
