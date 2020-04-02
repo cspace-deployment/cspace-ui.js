@@ -501,6 +501,8 @@ export const createNewRecord = (config, recordTypeConfig, vocabularyConfig, clon
   (dispatch, getState) => {
     let readClone;
 
+    const state = getState();
+
     if (cloneCsid) {
       const data = getRecordData(getState(), cloneCsid);
 
@@ -522,6 +524,11 @@ export const createNewRecord = (config, recordTypeConfig, vocabularyConfig, clon
       });
     }
 
+    const computeContext = {
+      form: getForm(state, recordTypeConfig.name),
+      roleNames: getUserRoleNames(state),
+    };
+
     return (
       readClone.then(() => dispatch({
         type: CREATE_NEW_RECORD,
@@ -529,7 +536,8 @@ export const createNewRecord = (config, recordTypeConfig, vocabularyConfig, clon
           config,
           recordTypeConfig,
           cloneCsid,
-          stickyFields: getStickyFields(getState()),
+          stickyFields: getStickyFields(state),
+          computeContext,
         },
       }))
     );
@@ -576,6 +584,7 @@ export const createNewSubrecord = (
         cloneCsid,
         isDefault,
         stickyFields: getStickyFields(getState()),
+        form: getForm(getState()),
       },
     }))
   );

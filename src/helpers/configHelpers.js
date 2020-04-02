@@ -490,13 +490,17 @@ export const getStickyFields = (fieldDescriptor, currentPath = []) => {
     }, []);
 };
 
-export const isFieldCloneable = (fieldDescriptor) => {
+export const isFieldCloneable = (fieldDescriptor, computeContext) => {
   const config = fieldDescriptor[configKey];
 
   if (config && 'cloneable' in config) {
-    return config.cloneable;
-  }
+    let cloneable = config.cloneable;
 
+    if (typeof(cloneable) === 'function') {
+      cloneable = cloneable(computeContext);
+    }
+    return !!cloneable;
+  }
   return true;
 };
 

@@ -321,12 +321,12 @@ export const createRecordData = recordTypeConfig =>
  * Clear uncloneable fields from record data. Existing (not undefined) values in fields that are
  * not cloneable are set to the default value if one exists, or undefined otherwise.
  */
-export const clearUncloneable = (fieldDescriptor, data) => {
+export const clearUncloneable = (fieldDescriptor, data, computeContext) => {
   if (!fieldDescriptor) {
     return data;
-  }
+  } 
 
-  if (typeof data !== 'undefined' && !isFieldCloneable(fieldDescriptor)) {
+  if (typeof data !== 'undefined' && !isFieldCloneable(fieldDescriptor, computeContext)) {
     // If the field has been configured as not cloneable and there is an existing value, replace
     // the existing value with the default value if there is one, or undefined otherwise. The old
     // UI did not set uncloneable fields to the default value, but I think this was an oversight.
@@ -339,13 +339,15 @@ export const clearUncloneable = (fieldDescriptor, data) => {
   }
 
   if (Immutable.Map.isMap(data)) {
-    return data.reduce((updatedData, child, name) =>
-      updatedData.set(name, clearUncloneable(fieldDescriptor[name], child)), data);
+    return data.reduce((updatedData, child, name) => updatedData.set(
+      name, clearUncloneable(fieldDescriptor[name], child, computeContext),
+    ), data);
   }
 
   if (Immutable.List.isList(data)) {
-    return data.reduce((updatedData, child, index) =>
-      updatedData.set(index, clearUncloneable(fieldDescriptor, child)), data);
+    return data.reduce((updatedData, child, index) => updatedData.set(
+      index, clearUncloneable(fieldDescriptor, child, computeContext),
+    ), data);
   }
 
   return data;
@@ -381,7 +383,14 @@ export const prepareClonedHierarchy = (fromCsid, data) => {
 /**
  * Create a new record as a clone of a given record.
  */
-export const cloneRecordData = (recordTypeConfig, csid, data) => {
+export const cloneRecordData = (cloneContext) => {
+  const {
+    data,
+    csid,
+    recordTypeConfig,
+    computeContext,
+  } = cloneContext;
+  
   if (!data) {
     return data;
   }
@@ -394,8 +403,8 @@ export const cloneRecordData = (recordTypeConfig, csid, data) => {
   clone = clone.deleteIn(['document', `${NS_PREFIX}:account_permission`]);
 
   // Reset fields that are configured as not cloneable.
+  clone = clearUncloneable(recordTypeConfig.fields, clone, computeContext);
 
-  clone = clearUncloneable(recordTypeConfig.fields, clone);
   clone = prepareClonedHierarchy(csid, clone);
 
   return clone;

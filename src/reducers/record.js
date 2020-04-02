@@ -157,7 +157,7 @@ const sortFieldInstances = (state, action) => {
   return setCurrentData(state, csid, updatedData);
 };
 
-const doCreateNew = (state, config, recordTypeConfig, options = {}) => {
+const doCreateNew = (state, config, recordTypeConfig, computeContext, options = {}) => {
   const {
     cloneCsid,
     subrecordName,
@@ -166,8 +166,15 @@ const doCreateNew = (state, config, recordTypeConfig, options = {}) => {
 
   let data;
 
+  const cloneContext = {
+    recordTypeConfig,
+    csid: cloneCsid,
+    data: getCurrentData(state, cloneCsid),
+    computeContext,
+  };
+
   if (cloneCsid) {
-    data = cloneRecordData(recordTypeConfig, cloneCsid, getCurrentData(state, cloneCsid));
+    data = cloneRecordData(cloneContext);
   }
 
   if (!data) {
@@ -242,9 +249,10 @@ const createNewRecord = (state, action) => {
     recordTypeConfig,
     cloneCsid,
     stickyFields,
+    computeContext,
   } = action.meta;
 
-  return doCreateNew(state, config, recordTypeConfig, {
+  return doCreateNew(state, config, recordTypeConfig, computeContext, {
     cloneCsid,
     stickyFields,
   });
@@ -519,9 +527,10 @@ const createNewSubrecord = (state, action) => {
     cloneCsid,
     isDefault,
     stickyFields,
+    computeContext,
   } = action.meta;
 
-  let nextState = doCreateNew(state, config, subrecordTypeConfig, {
+  let nextState = doCreateNew(state, config, subrecordTypeConfig, computeContext, {
     cloneCsid,
     subrecordName,
     stickyFields,
