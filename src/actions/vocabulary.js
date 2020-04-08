@@ -70,7 +70,7 @@ export const readVocabularyItemRefs = (csid, vocabularyName) => (dispatch, getSt
     params: {
       pgSz: '0',
       wf_deleted: false,
-      markIfReferenced: true,
+      markIfReferenced: false,
     },
   };
 
