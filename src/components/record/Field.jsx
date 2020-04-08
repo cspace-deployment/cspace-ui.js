@@ -16,6 +16,11 @@ import {
   isFieldRequired,
 } from '../../helpers/configHelpers';
 
+import {
+  DateInput,
+  StructuredDateInput,
+} from '../../helpers/configContextInputs';
+
 const {
   getPath,
   pathPropType,
@@ -23,9 +28,7 @@ const {
 
 const { Label } = inputComponents;
 
-const defaultViewConfigKey = 'view';
-
-const renderLabel = (fieldDescriptor, providedLabelMessage, recordData, props) => {
+const renderLabel = (fieldDescriptor, providedLabelMessage, requiredContext, props) => {
   const fieldConfig = fieldDescriptor[configKey];
   const message = providedLabelMessage || get(fieldConfig, ['messages', 'name']);
 
@@ -36,7 +39,7 @@ const renderLabel = (fieldDescriptor, providedLabelMessage, recordData, props) =
   const configuredProps = {};
 
   if ('required' in fieldConfig) {
-    configuredProps.required = isFieldRequired(fieldDescriptor, recordData);
+    configuredProps.required = isFieldRequired(requiredContext);
   }
 
   if ('readOnly' in fieldConfig) {
@@ -78,18 +81,24 @@ const propTypes = {
 
 const contextTypes = {
   config: PropTypes.object,
+  formName: PropTypes.string,
   intl: intlShape,
   recordData: PropTypes.instanceOf(Immutable.Map),
   recordType: PropTypes.string,
   recordTypeConfig: PropTypes.object,
+  roleNames: PropTypes.instanceOf(Immutable.List),
+  subrecordData: PropTypes.instanceOf(Immutable.Map),
 };
 
 export default function Field(props, context) {
   const {
     config,
+    formName,
     intl,
     recordData,
     recordType,
+    roleNames,
+    subrecordData,
   } = context;
 
   const {
@@ -121,12 +130,23 @@ export default function Field(props, context) {
   }
 
   const fieldConfig = field[configKey];
-  const viewConfigKey = (viewType === 'search') ? 'searchView' : defaultViewConfigKey;
-  const viewConfig = fieldConfig[viewConfigKey] || fieldConfig[defaultViewConfigKey];
-  const BaseComponent = viewConfig.type;
+  const isSearch = (viewType === 'search');
+
+  const viewConfig = isSearch
+    ? fieldConfig.searchView || fieldConfig.view
+    : fieldConfig.view;
+
+  let BaseComponent = viewConfig.type;
+
+  if (isSearch && !fieldConfig.searchView && BaseComponent === StructuredDateInput) {
+    // If a search view was not explicitly configured, and the view is a StructuredDateInput,
+    // automatically make the search view a DateInput.
+
+    BaseComponent = DateInput;
+  }
+
   const configuredProps = viewConfig.props || {};
   const providedProps = {};
-
   const basePropTypes = BaseComponent.propTypes;
 
   Object.keys(props).forEach((propName) => {
@@ -143,7 +163,17 @@ export default function Field(props, context) {
   }
 
   if ('label' in basePropTypes) {
-    computedProps.label = renderLabel(field, labelMessage, recordData, {
+    const requiredContext = {
+      path,
+      recordData,
+      subrecordData,
+      fieldDescriptor: field,
+      recordType,
+      form: formName,
+      roleNames,
+    };
+
+    computedProps.label = renderLabel(field, labelMessage, requiredContext, {
       readOnly: effectiveReadOnly,
     });
   }
@@ -162,7 +192,17 @@ export default function Field(props, context) {
       const childLabelMessage = childInput.props.labelMessage;
       const childField = field[childName];
 
-      return (childField && renderLabel(childField, childLabelMessage, recordData, {
+      const requiredContext = {
+        path: [...path, childName],
+        recordData,
+        subrecordData,
+        fieldDescriptor: childField,
+        recordType,
+        form: formName,
+        roleNames,
+      };
+
+      return (childField && renderLabel(childField, childLabelMessage, requiredContext, {
         key: childName,
         readOnly: effectiveReadOnly,
       }));
