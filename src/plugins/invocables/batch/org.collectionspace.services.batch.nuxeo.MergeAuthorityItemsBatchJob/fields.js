@@ -11,7 +11,7 @@ export default (configContext) => {
   } = configContext.configHelpers;
 
   return {
-    document: {
+    document: { 
       [config]: {
         view: {
           type: CompoundInput,
@@ -30,7 +30,7 @@ export default (configContext) => {
             type: AutocompleteInput,
             props: {
               disableAltTerms: true,
-              source: 'citation/local,citation/worldcat,concept/activity,concept/associated,concept/material,organization/local,organization/ulan,person/local,person/ulan,place/local,place/tgn,location/local,location/offsite,work/local',
+              source: 'citation/all,concept/all,organization/all,person/all,place/all,location/all,work/all',
               showQuickAdd: false,
             },
           },
