@@ -10,6 +10,10 @@ export default {
       id: 'panel.audit.changeInfo',
       defaultMessage: 'Record Change Information',
     },
+    fieldChangeInfo: {
+      id: 'panel.audit.fieldChangeInfo',
+      defaultMessage: 'Field Changes',
+    },
   }),
   record: defineMessages({
     name: {

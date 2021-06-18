@@ -1,6 +1,5 @@
 import { defineMessages } from 'react-intl';
 
-
 const template = (configContext) => {
   const {
     React,
@@ -15,41 +14,49 @@ const template = (configContext) => {
 
   const {
     Field,
-    InputTable
   } = configContext.recordComponents;
 
   return (
-    <Field name="document">
+    <Field name="ns3:audit_common">
       <Panel name="auditInfo">
-        <Cols>
-          <Col>
-            <Field name="idNumber" />          
-          </Col>
-          <Col/>
-          <Col/> 
-        </Cols>
+        <Row>
+          <Cols>
+            <Col>
+              <Field name="principal" />
+              <Field name="eventType" />
+              <Field name="eventDate" />
+            </Col>
+            <Col>
+              <Field name="saveMessage" />
+            </Col>
+          </Cols>
+        </Row>
       </Panel>
 
       <Panel name="changeInfo">
         <Cols>
           <Col>
-            <Field name="recordType" />
+            <Field name="resourceType" />
           </Col>
           <Col>
-            <Field name="recordId" />
+            <Field name="resourceCSID" />
           </Col>
         </Cols>
 
-        <Field name="fieldChangedGroupList">
-          <Field name="fieldChangedGroup">
-            <Row>
-              <Field name="fieldName" />
-              <Field name="originalValue" />
-              <Field name="newValue" />
-              <Field name="changeReason" />
-              </Row>
+        <Panel name="fieldChangeInfo" collapsible collapsed>
+          <Field name="fieldChangedGroupList">
+            <Field name="fieldChangedGroup">
+              <Cols>
+                <Col>
+                  <Field name="fieldName" />
+                  <Field name="originalValue" />
+                  <Field name="newValue" />
+                  <Field name="changeReason" />
+                </Col>
+              </Cols>
+            </Field>
           </Field>
-        </Field>
+        </Panel>
 
         <Field name="relationshipGroupList">
           <Field name="relationshipGroup">
@@ -65,17 +72,6 @@ const template = (configContext) => {
         <Field name="relRecordChecksumList">
           <Field name="relRecordChecksum" />
         </Field>
-
-        <Cols>
-          <Col>
-            <Field name="saveMessage" />
-            <Field name="updatedBy" />
-            <Field name="updatedAt" />
-          </Col>
-          <Col>
-            <Field name="recordChecksum" />
-          </Col>
-        </Cols>
       </Panel>
     </Field>
   );

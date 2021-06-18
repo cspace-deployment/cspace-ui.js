@@ -3,6 +3,7 @@ import authRef from './authRef';
 import common from './common';
 import refDoc from './refDoc';
 import role from './role';
+import audit from './audit';
 
 export default [
   account,
@@ -10,4 +11,5 @@ export default [
   common,
   refDoc,
   role,
+  audit,
 ];
