@@ -533,7 +533,6 @@ export const readRecord = (config, recordTypeConfig, vocabularyConfig, csid, opt
 export const createNewRecord = (config, recordTypeConfig, vocabularyConfig, cloneCsid) => (
   (dispatch, getState) => {
     let readClone;
-
     const state = getState();
 
     if (cloneCsid) {
