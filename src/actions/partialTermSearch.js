@@ -1,8 +1,14 @@
 import Immutable from 'immutable';
 import get from 'lodash/get';
-import getSession from './cspace';
-import { getRecordData, getRecordPagePrimaryCsid } from '../reducers';
+import getSession from '../helpers/session';
 import { cloneRecordData, prepareForSending } from '../helpers/recordDataHelpers';
+
+import {
+  getForm,
+  getRecordData,
+  getRecordPagePrimaryCsid,
+  getUserRoleNames,
+} from '../reducers';
 
 import {
   ADD_TERM_STARTED,
@@ -14,7 +20,7 @@ import {
   CLEAR_PARTIAL_TERM_SEARCH_RESULTS,
 } from '../constants/actionCodes';
 
-export const addTerm = (recordTypeConfig, vocabulary, displayName, partialTerm, clone) =>
+export const addTerm = (recordTypeConfig, vocabulary, displayName, partialTerm, clone) => (
   (dispatch, getState) => {
     const recordType = get(recordTypeConfig, 'name');
     const serviceConfig = get(recordTypeConfig, 'serviceConfig');
@@ -37,13 +43,24 @@ export const addTerm = (recordTypeConfig, vocabulary, displayName, partialTerm, 
     let newRecordData = Immutable.Map();
 
     if (clone) {
-      const cloneFromCsid = getRecordPagePrimaryCsid(getState());
+      const state = getState();
+      const cloneFromCsid = getRecordPagePrimaryCsid(state);
 
       if (cloneFromCsid) {
-        const cloneFromData = getRecordData(getState(), cloneFromCsid);
+        const cloneFromData = getRecordData(state, cloneFromCsid);
 
         if (cloneFromData) {
-          newRecordData = cloneRecordData(recordTypeConfig, cloneFromCsid, cloneFromData);
+          const computeContext = {
+            form: getForm(state, recordTypeConfig.name),
+            roleNames: getUserRoleNames(state),
+          };
+
+          newRecordData = cloneRecordData(
+            recordTypeConfig,
+            cloneFromCsid,
+            cloneFromData,
+            computeContext,
+          );
         }
       }
     }
@@ -74,7 +91,7 @@ export const addTerm = (recordTypeConfig, vocabulary, displayName, partialTerm, 
 
         return getSession().read(path);
       })
-      .then(response => dispatch({
+      .then((response) => dispatch({
         type: ADD_TERM_FULFILLED,
         payload: response,
         meta: {
@@ -84,7 +101,7 @@ export const addTerm = (recordTypeConfig, vocabulary, displayName, partialTerm, 
           vocabulary,
         },
       }))
-      .catch(error => dispatch({
+      .catch((error) => dispatch({
         type: ADD_TERM_REJECTED,
         payload: error,
         meta: {
@@ -94,7 +111,8 @@ export const addTerm = (recordTypeConfig, vocabulary, displayName, partialTerm, 
           vocabulary,
         },
       }));
-  };
+  }
+);
 
 export const findMatchingTerms = (recordTypeConfig, vocabulary, partialTerm) => (dispatch) => {
   const recordType = get(recordTypeConfig, 'name');
@@ -134,7 +152,7 @@ export const findMatchingTerms = (recordTypeConfig, vocabulary, partialTerm) => 
     : '';
 
   return getSession().read(`${servicePath}${itemPath}`, config)
-    .then(response => dispatch({
+    .then((response) => dispatch({
       type: PARTIAL_TERM_SEARCH_FULFILLED,
       payload: response,
       meta: {
@@ -143,7 +161,7 @@ export const findMatchingTerms = (recordTypeConfig, vocabulary, partialTerm) => 
         vocabulary,
       },
     }))
-    .catch(error => dispatch({
+    .catch((error) => dispatch({
       type: PARTIAL_TERM_SEARCH_REJECTED,
       payload: error,
       meta: {

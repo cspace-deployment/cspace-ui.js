@@ -2,12 +2,17 @@
 
 import { defineMessages } from 'react-intl';
 import get from 'lodash/get';
-import getSession from './cspace';
+import getSession from '../helpers/session';
 import getErrorDescription from '../helpers/getErrorDescription';
 import getNotificationID from '../helpers/notificationHelpers';
-import { createInvocationData } from '../helpers/invocationHelpers';
 import { getCsid } from '../helpers/recordDataHelpers';
-import { getReportViewerPath, VIEWER_WINDOW_NAME } from '../helpers/reportHelpers';
+import { hasBlockingError } from '../helpers/validationHelpers';
+
+import {
+  createInvocationData,
+  getReportViewerPath,
+  VIEWER_WINDOW_NAME,
+} from '../helpers/invocationHelpers';
 
 import {
   validateRecordData,
@@ -24,7 +29,6 @@ import {
 import {
   getNewRecordData,
   getRecordValidationErrors,
-  getRecordData,
 } from '../reducers';
 
 const messages = defineMessages({
@@ -35,7 +39,7 @@ const messages = defineMessages({
   },
 });
 
-export const openReport = (config, reportMetadata, invocationDescriptor) =>
+export const openReport = (config, reportMetadata, invocationDescriptor) => (
   (dispatch, getState) => {
     const reportCsid = getCsid(reportMetadata);
     const reportNameGetter = get(config, ['recordTypes', 'report', 'invocableName']);
@@ -50,7 +54,7 @@ export const openReport = (config, reportMetadata, invocationDescriptor) =>
     if (paramRecordTypeConfig) {
       validateParams = dispatch(validateRecordData(paramRecordTypeConfig, paramRecordCsid))
         .then(() => {
-          if (getRecordValidationErrors(getState(), paramRecordCsid)) {
+          if (hasBlockingError(getRecordValidationErrors(getState(), paramRecordCsid))) {
             return Promise.reject();
           }
 
@@ -65,12 +69,12 @@ export const openReport = (config, reportMetadata, invocationDescriptor) =>
     }
 
     return validateParams.then(() => {
-      const viewerPath =
-        getReportViewerPath(config, reportCsid, invocationDescriptor, params);
+      const viewerPath = getReportViewerPath(config, reportCsid, invocationDescriptor, params);
 
       window.open(viewerPath, VIEWER_WINDOW_NAME);
     });
-  };
+  }
+);
 
 export const invoke = (config, csid, invocationDescriptor, params) => (dispatch) => {
   const requestConfig = {
@@ -96,5 +100,3 @@ export const invoke = (config, csid, invocationDescriptor, params) => (dispatch)
       throw error;
     });
 };
-
-export const getMimeTypes = csid => (dispatch, getState) => getRecordData(getState(), csid);

@@ -153,9 +153,6 @@ export default (configContext) => {
           [config]: {
             view: {
               type: CompoundInput,
-              props: {
-                readOnly: true,
-              },
             },
           },
           forDocType: {
@@ -166,8 +163,12 @@ export default (configContext) => {
                   defaultMessage: 'For record type',
                 },
               }),
+              repeating: true,
               view: {
                 type: ObjectNameInput,
+                props: {
+                  readOnly: true,
+                },
               },
             },
           },

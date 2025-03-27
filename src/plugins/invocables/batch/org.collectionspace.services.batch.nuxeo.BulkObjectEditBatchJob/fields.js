@@ -6,12 +6,12 @@ export default (configContext) => {
     AutocompleteInput,
     TextInput,
     OptionPickerInput,
+    TermPickerInput,
   } = configContext.inputComponents;
 
   const {
     configKey: config,
   } = configContext.configHelpers;
-
 
   return {
     params: {
@@ -232,6 +232,39 @@ export default (configContext) => {
           }),
           view: {
             type: TextInput,
+          },
+        },
+      },
+      // naturalhistory
+      taxon: {
+        [config]: {
+          messages: defineMessages({
+            name: {
+              id: 'field.BulkObjectEditBatchJob.taxon.name',
+              defaultMessage: 'Taxon',
+            },
+          }),
+          view: {
+            type: AutocompleteInput,
+            props: {
+              source: 'taxon/local',
+            },
+          },
+        },
+      },
+      publishTo: {
+        [config]: {
+          messages: defineMessages({
+            name: {
+              id: 'field.BulkObjectEditBatchJob.publishTo.name',
+              defaultMessage: 'Publish to',
+            },
+          }),
+          view: {
+            type: TermPickerInput,
+            props: {
+              source: 'publishto',
+            },
           },
         },
       },
