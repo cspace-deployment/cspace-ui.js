@@ -22,6 +22,10 @@ export default (configContext) => {
     extensions,
   } = configContext.config;
 
+  const {
+    validateNotInUse,
+  } = configContext.validationHelpers;
+
   return {
     document: {
       [config]: {
@@ -43,6 +47,10 @@ export default (configContext) => {
           [config]: {
             cloneable: false,
             messages: defineMessages({
+              inUse: {
+                id: 'field.heldintrusts_common.heldInTrustNumber.inUse',
+                defaultMessage: 'The Held-in-Trust number {value} is in use by another record.',
+              },
               name: {
                 id: 'field.heldintrusts_common.heldInTrustNumber.name',
                 defaultMessage: 'Held-in-Trust number',
@@ -52,6 +60,11 @@ export default (configContext) => {
             searchView: {
               type: TextInput,
             },
+            validate: (validationContext) => validateNotInUse({
+              configContext,
+              validationContext,
+              fieldName: 'heldintrusts_common:heldInTrustNumber',
+            }),
             view: {
               type: IDGeneratorInput,
               props: {
@@ -60,32 +73,58 @@ export default (configContext) => {
             },
           },
         },
-        entryDate: {
+        typeOfAgreement: {
           [config]: {
-            dataType: DATA_TYPE_DATE,
             messages: defineMessages({
               name: {
-                id: 'field.heldintrusts_common.entryDate.name',
-                defaultMessage: 'Object entry date',
+                id: 'field.heldintrusts_common.typeOfAgreement.name',
+                defaultMessage: 'Type of agreement',
               },
             }),
             view: {
-              type: DateInput,
+              type: TermPickerInput,
+              props: {
+                source: 'heldintrusttype',
+              },
             },
           },
         },
-        heldInTrustDepositorGroupList: {
+        owners: {
           [config]: {
             view: {
               type: CompoundInput,
             },
           },
-          heldInTrustDepositorGroup: {
+          owner: {
             [config]: {
               messages: defineMessages({
                 name: {
-                  id: 'field.heldintrusts_common.heldInTrustDepositorGroup.name',
-                  defaultMessage: 'Depositor',
+                  id: 'field.heldintrusts_common.owner.name',
+                  defaultMessage: 'Owner',
+                },
+              }),
+              repeating: true,
+              view: {
+                type: AutocompleteInput,
+                props: {
+                  source: 'person/local,organization/local',
+                },
+              },
+            },
+          },
+        },
+        plannedReturnGroupList: {
+          [config]: {
+            view: {
+              type: CompoundInput,
+            },
+          },
+          plannedReturnGroup: {
+            [config]: {
+              messages: defineMessages({
+                name: {
+                  id: 'field.heldintrusts_common.plannedReturnGroup.name',
+                  defaultMessage: 'Planned return',
                 },
               }),
               repeating: true,
@@ -96,161 +135,16 @@ export default (configContext) => {
                 },
               },
             },
-            depositor: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.depositor.fullName',
-                    defaultMessage: 'Depositor name',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.depositor.name',
-                    defaultMessage: 'Name',
-                  },
-                }),
-                view: {
-                  type: AutocompleteInput,
-                  props: {
-                    source: 'person/local,organization/local',
-                  },
-                },
-              },
-            },
-            depositorContact: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.depositorContact.fullName',
-                    defaultMessage: 'Depositor contact',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.depositorContact.name',
-                    defaultMessage: 'Contact',
-                  },
-                }),
-                view: {
-                  type: AutocompleteInput,
-                  props: {
-                    source: 'person/local',
-                  },
-                },
-              },
-            },
-            depositorContactType: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.depositorContactType.fullName',
-                    defaultMessage: 'Depositor contact type',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.depositorContactType.name',
-                    defaultMessage: 'Contact type',
-                  },
-                }),
-                view: {
-                  type: TermPickerInput,
-                  props: {
-                    source: 'depositorcontacttypes',
-                  },
-                },
-              },
-            },
-            depositorNote: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.depositorNote.fullName',
-                    defaultMessage: 'Depositor note',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.depositorNote.name',
-                    defaultMessage: 'Note',
-                  },
-                }),
-                view: {
-                  type: TextInput,
-                },
-              },
-            },
-          },
-        },
-        entryMethods: {
-          [config]: {
-            view: {
-              type: CompoundInput,
-            },
-          },
-          entryMethod: {
-            [config]: {
-              messages: defineMessages({
-                name: {
-                  id: 'field.heldintrusts_common.entryMethod.name',
-                  defaultMessage: 'Object entry method',
-                },
-              }),
-              repeating: true,
-              view: {
-                type: TermPickerInput,
-                props: {
-                  source: 'entrymethod',
-                },
-              },
-            },
-          },
-        },
-        agreementGroupList: {
-          [config]: {
-            view: {
-              type: CompoundInput,
-            },
-          },
-          agreementGroup: {
-            [config]: {
-              messages: defineMessages({
-                name: {
-                  id: 'field.heldintrusts_common.agreementGroup.name',
-                  defaultMessage: 'Agreement status',
-                },
-              }),
-              repeating: true,
-              view: {
-                type: CompoundInput,
-                props: {
-                  tabular: true,
-                },
-              },
-            },
-            agreementStatus: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.agreementStatus.fullName',
-                    defaultMessage: 'Agreement status',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.agreementStatus.name',
-                    defaultMessage: 'Status',
-                  },
-                }),
-                view: {
-                  type: TermPickerInput,
-                  props: {
-                    source: 'agreementstatuses',
-                  },
-                },
-              },
-            },
-            agreementStatusDate: {
+            plannedReturnDate: {
               [config]: {
                 dataType: DATA_TYPE_DATE,
                 messages: defineMessages({
                   fullName: {
-                    id: 'field.heldintrusts_common.agreementStatusDate.fullName',
-                    defaultMessage: 'Agreement status date',
+                    id: 'field.heldintrusts_common.plannedReturnDate.fullName',
+                    defaultMessage: 'Planned return date',
                   },
                   name: {
-                    id: 'field.heldintrusts_common.agreementStatusDate.name',
+                    id: 'field.heldintrusts_common.plannedReturnDate.name',
                     defaultMessage: 'Date',
                   },
                 }),
@@ -259,20 +153,44 @@ export default (configContext) => {
                 },
               },
             },
-            agreementStatusNote: {
+            plannedReturnNote: {
               [config]: {
                 messages: defineMessages({
                   fullName: {
-                    id: 'field.heldintrusts_common.agreementStatusNote.fullName',
-                    defaultMessage: 'Agreement status note',
+                    id: 'field.heldintrusts_common.plannedReturnNote.fullName',
+                    defaultMessage: 'Planned return note',
                   },
                   name: {
-                    id: 'field.heldintrusts_common.agreementStatusNote.name',
+                    id: 'field.heldintrusts_common.plannedReturnNote.name',
                     defaultMessage: 'Note',
                   },
                 }),
                 view: {
                   type: TextInput,
+                },
+              },
+            },
+          },
+        },
+        agreementDescriptions: {
+          [config]: {
+            view: {
+              type: CompoundInput,
+            },
+          },
+          agreementDescription: {
+            [config]: {
+              messages: defineMessages({
+                name: {
+                  id: 'field.heldintrusts_common.agreementDescription.name',
+                  defaultMessage: 'Description of agreement',
+                },
+              }),
+              repeating: true,
+              view: {
+                type: TextInput,
+                props: {
+                  multiline: true,
                 },
               },
             },
@@ -300,103 +218,54 @@ export default (configContext) => {
             },
           },
         },
-        entryReason: {
-          [config]: {
-            messages: defineMessages({
-              name: {
-                id: 'field.heldintrusts_common.entryReason.name',
-                defaultMessage: 'Object entry reason',
-              },
-            }),
-            view: {
-              type: TermPickerInput,
-              props: {
-                source: 'heldintrustentryreasons',
-              },
-            },
-          },
-        },
-        returnDate: {
-          [config]: {
-            dataType: DATA_TYPE_DATE,
-            messages: defineMessages({
-              name: {
-                id: 'field.heldintrusts_common.returnDate.name',
-                defaultMessage: 'Object return date',
-              },
-            }),
-            view: {
-              type: DateInput,
-            },
-          },
-        },
-        entryNote: {
-          [config]: {
-            messages: defineMessages({
-              name: {
-                id: 'field.heldintrusts_common.entryNote.name',
-                defaultMessage: 'Entry note',
-              },
-            }),
-            view: {
-              type: TextInput,
-              props: {
-                multiline: true,
-              },
-            },
-          },
-        },
-        internalApprovalGroupList: {
+        agreementApprovalGroupList: {
           [config]: {
             view: {
               type: CompoundInput,
             },
           },
-          internalApprovalGroup: {
+          agreementApprovalGroup: {
             [config]: {
               messages: defineMessages({
                 name: {
-                  id: 'field.heldintrusts_common.heldInTrustInternalApprovalGroup.name',
-                  defaultMessage: 'Internal approval',
+                  id: 'field.heldintrusts_common.agreementApprovalGroup.name',
+                  defaultMessage: 'Held-in-Trust status',
                 },
               }),
               repeating: true,
               view: {
                 type: CompoundInput,
-                props: {
-                  tabular: true,
-                },
               },
             },
-            internalApprovalGroupName: {
+            agreementGroup: {
               [config]: {
                 messages: defineMessages({
                   fullName: {
-                    id: 'field.heldintrusts_common.internalApprovalGroupName.fullName',
-                    defaultMessage: 'Internal approval group',
+                    id: 'field.heldintrusts_common.agreementGroup.fullName',
+                    defaultMessage: 'Held-in-Trust status group',
                   },
                   name: {
-                    id: 'field.heldintrusts_common.internalApprovalGroupName.name',
+                    id: 'field.heldintrusts_common.agreementGroup.name',
                     defaultMessage: 'Group',
                   },
                 }),
                 view: {
                   type: TermPickerInput,
                   props: {
-                    source: 'hitapprovalgroups',
+                    source: 'deaccessionapprovalgroup',
                   },
                 },
               },
             },
-            internalApprovalIndividual: {
+            agreementIndividual: {
               [config]: {
                 messages: defineMessages({
                   fullName: {
-                    id: 'field.heldintrusts_common.internalApprovalIndividual.fullName',
-                    defaultMessage: 'Internal approval individual',
+                    id: 'field.heldintrusts_common.agreementIndividual.fullName',
+                    defaultMessage: 'Held-in-Trust status individual',
                   },
                   name: {
-                    id: 'field.heldintrusts_common.internalApprovalIndividual.name',
+                    id: 'field.heldintrusts_common.agreementIndividual.name',
                     defaultMessage: 'Individual',
                   },
                 }),
@@ -408,35 +277,36 @@ export default (configContext) => {
                 },
               },
             },
-            internalApprovalStatus: {
+            agreementStatus: {
               [config]: {
                 messages: defineMessages({
                   fullName: {
-                    id: 'field.heldintrusts_common.internalApprovalStatus.fullName',
-                    defaultMessage: 'Internal approval status',
+                    id: 'field.heldintrusts_common.agreementStatus.fullName',
+                    defaultMessage: 'Held-in-Trust status',
                   },
                   name: {
-                    id: 'field.heldintrusts_common.internalApprovalStatus.name',
+                    id: 'field.heldintrusts_common.agreementStatus.name',
                     defaultMessage: 'Status',
                   },
                 }),
                 view: {
                   type: TermPickerInput,
                   props: {
-                    source: 'hitapprovaltypes',
+                    source: 'deaccessionapprovalstatus',
                   },
                 },
               },
             },
-            internalApprovalDate: {
+            agreementDate: {
               [config]: {
+                dataType: DATA_TYPE_DATE,
                 messages: defineMessages({
                   fullName: {
-                    id: 'field.heldintrusts_common.internalApprovalDate.fullName',
-                    defaultMessage: 'Internal approval date',
+                    id: 'field.heldintrusts_common.agreementDate.fullName',
+                    defaultMessage: 'Held-in-Trust status date',
                   },
                   name: {
-                    id: 'field.heldintrusts_common.internalApprovalDate.name',
+                    id: 'field.heldintrusts_common.agreementDate.name',
                     defaultMessage: 'Date',
                   },
                 }),
@@ -445,289 +315,23 @@ export default (configContext) => {
                 },
               },
             },
-            internalApprovalNote: {
+            agreementNote: {
               [config]: {
                 messages: defineMessages({
                   fullName: {
-                    id: 'field.heldintrusts_common.internalApprovalNote.fullName',
-                    defaultMessage: 'Internal approval note',
+                    id: 'field.heldintrusts_common.agreementNote.fullName',
+                    defaultMessage: 'Held-in-Trust status note',
                   },
                   name: {
-                    id: 'field.heldintrusts_common.internalApprovalNote.name',
+                    id: 'field.heldintrusts_common.agreementNote.name',
                     defaultMessage: 'Note',
                   },
                 }),
                 view: {
                   type: TextInput,
-                },
-              },
-            },
-          },
-        },
-        externalApprovalGroupList: {
-          [config]: {
-            view: {
-              type: CompoundInput,
-            },
-          },
-          externalApprovalGroup: {
-            [config]: {
-              messages: defineMessages({
-                name: {
-                  id: 'field.heldintrusts_common.heldInTrustExternalApprovalGroup.name',
-                  defaultMessage: 'External approval',
-                },
-              }),
-              repeating: true,
-              view: {
-                type: CompoundInput,
-                props: {
-                  tabular: true,
-                },
-              },
-            },
-            externalApprovalGroupName: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.externalApprovalGroupName.fullName',
-                    defaultMessage: 'External approval group',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.externalApprovalGroupName.name',
-                    defaultMessage: 'Group',
-                  },
-                }),
-                view: {
-                  type: TermPickerInput,
                   props: {
-                    source: 'hitapprovalgroups',
+                    multiline: true,
                   },
-                },
-              },
-            },
-            externalApprovalIndividual: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.externalApprovalIndividual.fullName',
-                    defaultMessage: 'External approval individual',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.externalApprovalIndividual.name',
-                    defaultMessage: 'Individual',
-                  },
-                }),
-                view: {
-                  type: AutocompleteInput,
-                  props: {
-                    source: 'person/local',
-                  },
-                },
-              },
-            },
-            externalApprovalStatus: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.externalApprovalStatus.fullName',
-                    defaultMessage: 'External approval status',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.externalApprovalStatus.name',
-                    defaultMessage: 'Status',
-                  },
-                }),
-                view: {
-                  type: TermPickerInput,
-                  props: {
-                    source: 'hitapprovaltypes',
-                  },
-                },
-              },
-            },
-            externalApprovalDate: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.externalApprovalDate.fullName',
-                    defaultMessage: 'External approval date',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.externalApprovalDate.name',
-                    defaultMessage: 'Date',
-                  },
-                }),
-                view: {
-                  type: DateInput,
-                },
-              },
-            },
-            externalApprovalNote: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.externalApprovalNote.fullName',
-                    defaultMessage: 'External approval note',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.externalApprovalNote.name',
-                    defaultMessage: 'Note',
-                  },
-                }),
-                view: {
-                  type: TextInput,
-                },
-              },
-            },
-          },
-        },
-        handlingPreferences: {
-          [config]: {
-            messages: defineMessages({
-              name: {
-                id: 'field.heldintrusts_common.handlingPreferences.name',
-                defaultMessage: 'Handling preferences',
-              },
-            }),
-            view: {
-              type: TextInput,
-              props: {
-                multiline: true,
-              },
-            },
-          },
-        },
-        handlingLimitationsGroupList: {
-          [config]: {
-            view: {
-              type: CompoundInput,
-            },
-          },
-          handlingLimitationsGroup: {
-            [config]: {
-              messages: defineMessages({
-                name: {
-                  id: 'field.heldintrusts_common.handlingLimitationsGroup.name',
-                  defaultMessage: 'Handling limitations',
-                },
-              }),
-              repeating: true,
-              view: {
-                type: CompoundInput,
-              },
-            },
-            handlingLimitationsType: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.handlingLimitationsType.fullName',
-                    defaultMessage: 'Handling limitations type',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.handlingLimitationsType.name',
-                    defaultMessage: 'Type',
-                  },
-                }),
-                view: {
-                  type: TermPickerInput,
-                  props: {
-                    source: 'handlinglimitationstypes',
-                  },
-                },
-              },
-            },
-            handlingLimitationsRequestor: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.handlingLimitationsRequestor.fullName',
-                    defaultMessage: 'Handling limitations requestor',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.handlingLimitationsRequestor.name',
-                    defaultMessage: 'Requestor',
-                  },
-                }),
-                view: {
-                  type: AutocompleteInput,
-                  props: {
-                    source: 'person/local,organization/local',
-                  },
-                },
-              },
-            },
-            handlingLimitationsLevel: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.handlingLimitationsLevel.fullName',
-                    defaultMessage: 'Handling limitations level',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.handlingLimitationsLevel.name',
-                    defaultMessage: 'Level',
-                  },
-                }),
-                view: {
-                  type: TermPickerInput,
-                  props: {
-                    source: 'handlinglimitationslevels',
-                  },
-                },
-              },
-            },
-            handlingLimitationsOnBehalfOf: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.handlingLimitationsOnBehalfOf.fullName',
-                    defaultMessage: 'Handling limitations on behalf of',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.handlingLimitationsOnBehalfOf.name',
-                    defaultMessage: 'On behalf of',
-                  },
-                }),
-                view: {
-                  type: AutocompleteInput,
-                  props: {
-                    source: 'person/local,organization/local',
-                  },
-                },
-              },
-            },
-            handlingLimitationsDetail: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.handlingLimitationsDetail.fullName',
-                    defaultMessage: 'Handling limitations detail',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.handlingLimitationsDetail.name',
-                    defaultMessage: 'Detail',
-                  },
-                }),
-                view: {
-                  type: TextInput,
-                },
-              },
-            },
-            handlingLimitationsDate: {
-              [config]: {
-                messages: defineMessages({
-                  fullName: {
-                    id: 'field.heldintrusts_common.handlingLimitationsDate.fullName',
-                    defaultMessage: 'Handling limitations date',
-                  },
-                  name: {
-                    id: 'field.heldintrusts_common.handlingLimitationsDate.name',
-                    defaultMessage: 'Date',
-                  },
-                }),
-                view: {
-                  type: DateInput,
                 },
               },
             },
@@ -750,13 +354,11 @@ export default (configContext) => {
               repeating: true,
               view: {
                 type: CompoundInput,
-                props: {
-                  tabular: true,
-                },
               },
             },
             correspondenceDate: {
               [config]: {
+                dataType: DATA_TYPE_DATE,
                 messages: defineMessages({
                   fullName: {
                     id: 'field.heldintrusts_common.correspondenceDate.fullName',
@@ -826,23 +428,192 @@ export default (configContext) => {
                 }),
                 view: {
                   type: TextInput,
+                  props: {
+                    multiline: true,
+                  },
                 },
               },
             },
-            correspondenceReference: {
+            correspondenceType: {
               [config]: {
                 messages: defineMessages({
                   fullName: {
-                    id: 'field.heldintrusts_common.correspondenceReference.fullName',
-                    defaultMessage: 'Correspondence reference',
+                    id: 'field.heldintrusts_common.correspondenceType.fullName',
+                    defaultMessage: 'Correspondence type',
                   },
                   name: {
-                    id: 'field.heldintrusts_common.correspondenceReference.name',
-                    defaultMessage: 'Reference',
+                    id: 'field.heldintrusts_common.correspondenceType.name',
+                    defaultMessage: 'Type',
+                  },
+                }),
+                view: {
+                  type: TermPickerInput,
+                  props: {
+                    source: 'correspondencetype',
+                  },
+                },
+              },
+            },
+          },
+        },
+        culturalCareNotes: {
+          [config]: {
+            view: {
+              type: CompoundInput,
+            },
+          },
+          culturalCareNote: {
+            [config]: {
+              messages: defineMessages({
+                name: {
+                  id: 'field.heldintrusts_common.culturalCareNote.name',
+                  defaultMessage: 'Cultural care note',
+                },
+              }),
+              repeating: true,
+              view: {
+                type: TextInput,
+                props: {
+                  multiline: true,
+                },
+              },
+            },
+          },
+        },
+        accessLimitationsGroupList: {
+          [config]: {
+            view: {
+              type: CompoundInput,
+            },
+          },
+          accessLimitationsGroup: {
+            [config]: {
+              messages: defineMessages({
+                name: {
+                  id: 'field.heldintrusts_common.accessLimitationsGroup.name',
+                  defaultMessage: 'Access limitation',
+                },
+              }),
+              repeating: true,
+              view: {
+                type: CompoundInput,
+                props: {
+                  tabular: true,
+                },
+              },
+            },
+            limitationType: {
+              [config]: {
+                messages: defineMessages({
+                  fullName: {
+                    id: 'field.heldintrusts_common.limitationType.fullName',
+                    defaultMessage: 'Access limitation type',
+                  },
+                  name: {
+                    id: 'field.heldintrusts_common.limitationType.name',
+                    defaultMessage: 'Type',
+                  },
+                }),
+                view: {
+                  type: TermPickerInput,
+                  props: {
+                    source: 'limitationtype',
+                  },
+                },
+              },
+            },
+            limitationLevel: {
+              [config]: {
+                messages: defineMessages({
+                  fullName: {
+                    id: 'field.heldintrusts_common.limitationLevel.fullName',
+                    defaultMessage: 'Access limitation level',
+                  },
+                  name: {
+                    id: 'field.heldintrusts_common.limitationLevel.name',
+                    defaultMessage: 'Level',
+                  },
+                }),
+                view: {
+                  type: TermPickerInput,
+                  props: {
+                    source: 'limitationlevel',
+                  },
+                },
+              },
+            },
+            limitationDetails: {
+              [config]: {
+                messages: defineMessages({
+                  fullName: {
+                    id: 'field.heldintrusts_common.limitationDetails.fullName',
+                    defaultMessage: 'Access limitation detail',
+                  },
+                  name: {
+                    id: 'field.heldintrusts_common.limitationDetails.name',
+                    defaultMessage: 'Detail',
                   },
                 }),
                 view: {
                   type: TextInput,
+                },
+              },
+            },
+            requester: {
+              [config]: {
+                messages: defineMessages({
+                  fullName: {
+                    id: 'field.heldintrusts_common.requester.fullName',
+                    defaultMessage: 'Access limitation requester',
+                  },
+                  name: {
+                    id: 'field.heldintrusts_common.requester.name',
+                    defaultMessage: 'Requester',
+                  },
+                }),
+                view: {
+                  type: AutocompleteInput,
+                  props: {
+                    source: 'person/local',
+                  },
+                },
+              },
+            },
+            requestOnBehalfOf: {
+              [config]: {
+                messages: defineMessages({
+                  fullName: {
+                    id: 'field.heldintrusts_common.requestOnBehalfOf.fullName',
+                    defaultMessage: 'Access limitation requested on behalf of',
+                  },
+                  name: {
+                    id: 'field.heldintrusts_common.requestOnBehalfOf.name',
+                    defaultMessage: 'On behalf of',
+                  },
+                }),
+                view: {
+                  type: AutocompleteInput,
+                  props: {
+                    source: 'organization/local',
+                  },
+                },
+              },
+            },
+            requestDate: {
+              [config]: {
+                dataType: DATA_TYPE_DATE,
+                messages: defineMessages({
+                  fullName: {
+                    id: 'field.heldintrusts_common.requestDate.fullName',
+                    defaultMessage: 'Access limitation request date',
+                  },
+                  name: {
+                    id: 'field.heldintrusts_common.requestDate.name',
+                    defaultMessage: 'Date',
+                  },
+                }),
+                view: {
+                  type: DateInput,
                 },
               },
             },

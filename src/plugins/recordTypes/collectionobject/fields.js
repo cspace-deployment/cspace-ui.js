@@ -385,7 +385,6 @@ export default (configContext) => {
           },
           publishTo: {
             [config]: {
-              defaultValue: 'urn:cspace:core.collectionspace.org:vocabularies:name(publishto):item:name(none)\'None\'',
               messages: defineMessages({
                 name: {
                   id: 'field.collectionobjects_common.publishTo.name',
@@ -410,7 +409,6 @@ export default (configContext) => {
           },
           inventoryStatus: {
             [config]: {
-              defaultValue: 'urn:cspace:core.collectionspace.org:vocabularies:name(inventorystatus):item:name(unknown)\'unknown\'',
               messages: defineMessages({
                 name: {
                   id: 'field.collectionobjects_common.inventoryStatus.name',
@@ -3881,6 +3879,64 @@ export default (configContext) => {
             },
           },
         },
+        publishedRelatedLinkGroupList: {
+          [config]: {
+            view: {
+              type: CompoundInput,
+            },
+          },
+          publishedRelatedLinkGroup: {
+            [config]: {
+              messages: defineMessages({
+                name: {
+                  id: 'field.procedure.publishedRelatedLinkGroup.name',
+                  defaultMessage: 'Published related link',
+                },
+              }),
+              repeating: true,
+              view: {
+                type: CompoundInput,
+                props: {
+                  tabular: true,
+                },
+              },
+            },
+            relatedLink: {
+              [config]: {
+                messages: defineMessages({
+                  fullName: {
+                    id: 'field.collectionobjects_common.relatedLink.fullName',
+                    defaultMessage: 'Published related link url',
+                  },
+                  name: {
+                    id: 'field.collectionobjects_common.relatedLink.name',
+                    defaultMessage: 'URL',
+                  },
+                }),
+                view: {
+                  type: URLInput,
+                },
+              },
+            },
+            descriptiveTitle: {
+              [config]: {
+                messages: defineMessages({
+                  fullName: {
+                    id: 'field.collectionobjects_common.descriptiveTitle.fullName',
+                    defaultMessage: 'Published related link descriptive title',
+                  },
+                  name: {
+                    id: 'field.collectionobjects_common.descriptiveTitle.name',
+                    defaultMessage: 'Descriptive title',
+                  },
+                }),
+                view: {
+                  type: TextInput,
+                },
+              },
+            },
+          },
+        },
         referenceGroupList: {
           [config]: {
             view: {
@@ -4091,7 +4147,7 @@ export default (configContext) => {
               view: {
                 type: AutocompleteInput,
                 props: {
-                  source: 'person/local,person/shared',
+                  source: 'person/local,person/shared,organization/local,organization/shared',
                 },
               },
             },
@@ -5290,11 +5346,11 @@ export default (configContext) => {
               [config]: {
                 messages: defineMessages({
                   fullName: {
-                    id: 'field.collectionobjects_common.compressionstandard.fullName',
+                    id: 'field.collectionobjects_common.compressionStandard.fullName',
                     defaultMessage: 'File codec compression standard',
                   },
                   name: {
-                    id: 'field.collectionobjects_common.compressionstandard.name',
+                    id: 'field.collectionobjects_common.compressionStandard.name',
                     defaultMessage: 'Compression standard',
                   },
                 }),
@@ -6258,6 +6314,26 @@ export default (configContext) => {
                   type: TermPickerInput,
                   props: {
                     source: 'objectcounttypes',
+                  },
+                },
+              },
+            },
+            objectCountUnit: {
+              [config]: {
+                messages: defineMessages({
+                  fullName: {
+                    id: 'field.collectionobjects_common.objectCountUnit.fullName',
+                    defaultMessage: 'Object count unit',
+                  },
+                  name: {
+                    id: 'field.collectionobjects_common.objectCountUnit.name',
+                    defaultMessage: 'Unit',
+                  },
+                }),
+                view: {
+                  type: TermPickerInput,
+                  props: {
+                    source: 'objectcountunit',
                   },
                 },
               },

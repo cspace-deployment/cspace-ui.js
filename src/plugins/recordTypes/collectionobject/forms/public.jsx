@@ -78,6 +78,7 @@ const template = (configContext) => {
         <Field name="objectCountGroupList">
           <Field name="objectCountGroup">
             <Field name="objectCount" />
+            <Field name="objectCountUnit" />
             <Field name="objectCountType" />
             <Field name="objectCountCountedBy" />
             <Field name="objectCountDate" />
@@ -162,6 +163,16 @@ const template = (configContext) => {
       <Panel name="viewer" collapsible>
         <Field name="viewersContributionNote" />
       </Panel>
+
+      <Panel name="reference" collapsible>
+        <Field name="publishedRelatedLinkGroupList">
+          <Field name="publishedRelatedLinkGroup">
+            <Field name="relatedLink" />
+            <Field name="descriptiveTitle" />
+          </Field>
+        </Field>
+      </Panel>
+
     </Field>
   );
 };

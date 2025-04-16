@@ -5,12 +5,12 @@ export default {
     name: {
       id: 'record.hit.name',
       description: 'The name of the record type.',
-      defaultMessage: 'Held-in-Trust',
+      defaultMessage: 'Held-in-Trust (Legacy)',
     },
     collectionName: {
       id: 'record.hit.collectionName',
       description: 'The name of a collection of records of the type.',
-      defaultMessage: 'Held-in-Trust',
+      defaultMessage: 'Held-in-Trust (Legacy)',
     },
   }),
   panel: defineMessages({

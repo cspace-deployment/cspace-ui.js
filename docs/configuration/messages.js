@@ -1268,9 +1268,9 @@ export default {
 
   "field.collectionobjects_common.comment.name": "Comment",
 
-  "field.collectionobjects_common.compressionstandard.fullName": "File codec compression standard",
+  "field.collectionobjects_common.compressionStandard.fullName": "File codec compression standard",
 
-  "field.collectionobjects_common.compressionstandard.name": "Compression standard",
+  "field.collectionobjects_common.compressionStandard.name": "Compression standard",
 
   "field.collectionobjects_common.computedCurrentLocation.name": "Computed current location",
 
@@ -2262,7 +2262,7 @@ export default {
 
   "field.conservation_common.sampleReturned.fullName": "Destructive analysis sample returned",
 
-  "field.conservation_common.sampleReturned.nadme": "Sample returned",
+  "field.conservation_common.sampleReturned.name": "Sample returned",
 
   "field.conservation_common.sampleReturnedLocation.fullName": "Destructive analysis sample returned location",
 
@@ -4362,9 +4362,9 @@ export default {
 
   "field.uoc_common.feeValue.name": "Value",
 
-  "field.uoc_common.hoursSpent.fullName": "Start/ongoing date hours spent",
+  "field.uoc_common.useDateHoursSpent.fullName": "Start/ongoing date hours spent",
 
-  "field.uoc_common.hoursSpent.name": "Hours spent",
+  "field.uoc_common.useDateHoursSpent.name": "Hours spent",
 
   "field.uoc_common.location.name": "Location",
 

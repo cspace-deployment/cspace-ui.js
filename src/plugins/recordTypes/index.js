@@ -13,11 +13,15 @@ import collectionobject from './collectionobject';
 import concept from './concept';
 import conditioncheck from './conditioncheck';
 import conservation from './conservation';
+import consultation from './consultation';
 import contact from './contact';
+import deaccession from './deaccession';
+import dutyofcare from './dutyofcare';
 import exhibition from './exhibition';
+import exit from './exit';
 import exxport from './export';
 import group from './group';
-// import heldintrust from './heldintrust';
+import heldintrust from './heldintrust';
 import hit from './hit';
 import idgenerator from './idgenerator';
 import insurance from './insurance';
@@ -28,6 +32,7 @@ import loanout from './loanout';
 import location from './location';
 import media from './media';
 import movement from './movement';
+import nagprainventory from './nagprainventory';
 import object from './object';
 import objectexit from './objectexit';
 import organization from './organization';
@@ -35,9 +40,12 @@ import person from './person';
 import place from './place';
 import procedure from './procedure';
 import relation from './relation';
+import repatriationrequest from './repatriationrequest';
 import report from './report';
 import reportinvocation from './reportinvocation';
+import restrictedmedia from './restrictedmedia';
 import structdateparser from './structdateparser';
+import summarydocumentation from './summarydocumentation';
 import transport from './transport';
 import uoc from './uoc';
 import valuation from './valuation';
@@ -56,15 +64,20 @@ export default [
   blob,
   citation,
   chronology,
+  repatriationrequest,
   collectionobject,
   concept,
   conditioncheck,
   conservation,
+  consultation,
   contact,
+  deaccession,
+  dutyofcare,
   exhibition,
+  exit,
   exxport,
   group,
-  // heldintrust,
+  heldintrust,
   hit,
   idgenerator,
   insurance,
@@ -75,6 +88,7 @@ export default [
   location,
   media,
   movement,
+  nagprainventory,
   object,
   objectexit,
   organization,
@@ -86,7 +100,9 @@ export default [
   relation,
   report,
   reportinvocation,
+  restrictedmedia,
   structdateparser,
+  summarydocumentation,
   valuation,
   vocabulary,
   work,
