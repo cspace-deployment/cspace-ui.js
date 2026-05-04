@@ -1,5 +1,91 @@
 # Change Log
 
+## v10.2.0
+
+### Breaking Changes
+
+- Search now uses a new search API supported in CollectionSpace v8.3. If this version of cspace-ui is used with an older CollectionSpace server, users will not be able to get search results.
+
+### Non-Breaking Changes
+
+- Search Results
+  - Create alternate views of search results that a user can toggle between depending on needs for the given query.
+    - User can view search results in table format.
+    - User can view search results in grid (image-centric) format.
+    - User can view search results in detail format.
+    - User can sort the results.
+- New Advanced Search form
+  - A new search form with simpler layout is available along the classic one.
+  - Add "is not blank/is blank" operators to structured date fields.
+  - Add "contain/match" operators to authority fields.
+- Rename "MyCollectionSpace" to "Recent Activity".
+- Fix performance issue when relating m:n records.
+- Enabled Hot Module Replacement for faster development.
+- Add 'repatriation preparation' to the movement static term list `moveReasons`
+
+### New Fields 
+
+- On the record editor for Objects
+  - The Controlled Content Place repeating field `controlledContentPlaces/controlledContentPlace` has been added
+- On the record editor for Acquisition
+  - The Acquisition description free text field `acquisitionDescription` has been added
+  - The Parties Involved repeating group `partiesInvolvedGroupList/partiesInvolvedGroup` has been added
+- On the record editor for Consultation
+  - The repeating field `consultationOutcomes/consultationOutcome` has been added
+- On the record editor for Deaccession
+  - The Parties Involved repeating group `partiesInvolvedGroupList/partiesInvolvedGroup` has been added
+
+### Accessibility
+
+- Display alt text with thumbnail images (Criteria 1.1.1).
+- Add link to User Manual in Footer (Criteria 3.2.6).
+- ARIA/WCAG updates for search table.
+- Fix Contrast for Selected Page in search results paginator (Criteria 1.4.3)
+- Add H1 tag to the Login Screen (Criteria 1.3.1)
+- Display alt text and title with images of image gallery (Criteria 1.1.1)
+
+### Bug Fixes
+
+- Fix report invocation failure when some number of records over 190 are selected.
+- Fix placeholders displayed in error message when user does not have permission to create relationships.
+
+**Full Changelog**: [`v10.1.0...v10.2.0`](https://github.com/collectionspace/cspace-ui.js/compare/v10.1.0-rc.0...release-10.2.0-rc2.0)
+
+## v10.1.0
+
+v10.1.0 adds support for CollectionSpace 8.2.
+
+### New Fields
+
+A free text `note` field has been added to the following procedures:
+- Object Exit
+- Held-In-Trust
+- NAGPRA Inventory
+- Summary Documentation
+
+A controlled repeating field `objectProductionAgent` has been added to CollectionObject
+
+### Non-Breaking Changes
+
+Improve form validation for role description and role name
+
+### Bug Fixes
+
+- Remove TermPickerInput views from Vocabulary Used By panel
+- Add `documentation` to status group label
+- Fix typo in label id for `publishedRelatedLinkGroup` in CollectionObject
+
+**Full Changelog**: [`v10.0.2...v10.1.0`](https://github.com/collectionspace/cspace-ui.js/compare/v10.0.2...v10.1.0)
+
+## V10.0.2
+
+- Fix document names typos in Deaccession and Duty of Care
+
+## V10.0.1
+
+- Fix bug when logging in without read permissions to the service groups endpoint
+- Fix typos in label ids
+
 ## v10.0.0
 
 v10.0.0 adds support for CollectionSpace 8.1. It can not be used with earlier versions.

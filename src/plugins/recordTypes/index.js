@@ -1,5 +1,6 @@
 import account from './account';
 import acquisition from './acquisition';
+import advancedsearch from './advancedsearch';
 import all from './all';
 // import audit from './audit';
 import authority from './authority';
@@ -55,6 +56,7 @@ import work from './work';
 export default [
   account,
   acquisition,
+  advancedsearch,
   all,
   // audit,
   authority,

@@ -26,7 +26,9 @@ const propTypes = {
   recordType: PropTypes.string,
   rootPath: PropTypes.string,
   showInlineParens: PropTypes.bool,
+  showMiniButtonFooter: PropTypes.bool,
   showRemoveButton: PropTypes.bool,
+  isNewSearchForm: PropTypes.bool,
   getSearchConditionInputComponent: PropTypes.func.isRequired,
   onCommit: PropTypes.func,
   onRemove: PropTypes.func,
@@ -35,6 +37,7 @@ const propTypes = {
 const defaultProps = {
   showInlineParens: true,
   showRemoveButton: true,
+  showMiniButtonFooter: true,
 };
 
 const {
@@ -302,6 +305,7 @@ export default class BooleanConditionInput extends Component {
       recordType,
       rootPath,
       getSearchConditionInputComponent,
+      isNewSearchForm,
     } = this.props;
 
     const operator = condition.get('op');
@@ -335,6 +339,7 @@ export default class BooleanConditionInput extends Component {
             recordType={recordType}
             rootPath={rootPath}
             getSearchConditionInputComponent={getSearchConditionInputComponent}
+            isNewSearchForm={isNewSearchForm}
             onCommit={this.handleChildConditionCommit}
             onRemove={this.handleChildConditionRemove}
           />
@@ -407,6 +412,7 @@ export default class BooleanConditionInput extends Component {
     const {
       inline,
       showInlineParens,
+      showMiniButtonFooter,
     } = this.props;
 
     let openParen;
@@ -417,15 +423,15 @@ export default class BooleanConditionInput extends Component {
       closeParen = <div>)</div>;
     }
 
-    const className = inline ? styles.inline : styles.normal;
+    const classNames = `${inline ? styles.inline : styles.normal} ${!showMiniButtonFooter ? styles.withoutMiniButtonFooter : null}`;
 
     return (
-      <div className={className} ref={this.handleRef}>
+      <div className={classNames} ref={this.handleRef}>
         {this.renderHeader()}
         {openParen}
         {this.renderChildConditions()}
         {closeParen}
-        {this.renderFooter()}
+        {showMiniButtonFooter && this.renderFooter()}
       </div>
     );
   }

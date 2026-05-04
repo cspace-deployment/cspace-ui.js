@@ -8,6 +8,10 @@ import { OP_AND, OP_OR, OP_GROUP } from '../../constants/searchOperators';
 import GroupConditionInputContainer from '../../containers/search/input/GroupConditionInputContainer';
 import BooleanConditionInput from './input/BooleanConditionInput';
 import FieldConditionInput from './input/FieldConditionInput';
+import {
+  SEARCH_TERMS_GROUP_LIMIT_BY,
+  SEARCH_TERMS_GROUP_SEARCH_TERMS,
+} from '../../constants/searchNames';
 
 const propTypes = {
   condition: PropTypes.instanceOf(Immutable.Map),
@@ -16,11 +20,14 @@ const propTypes = {
   }),
   hasChildGroups: PropTypes.bool,
   inline: PropTypes.bool,
+  withoutPanel: PropTypes.bool,
   preferredBooleanOp: PropTypes.string,
   preferredCondition: PropTypes.instanceOf(Immutable.Map),
   readOnly: PropTypes.bool,
   recordType: PropTypes.string,
+  searchTermsGroup: PropTypes.string,
   onConditionCommit: PropTypes.func,
+  isBroadSearch: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -109,17 +116,34 @@ export default class AdvancedSearchBuilder extends Component {
       preferredCondition,
       recordType,
       onConditionCommit,
+      searchTermsGroup,
+      isBroadSearch,
     } = this.props;
 
     if (recordType && onConditionCommit) {
       let normalizedCondition;
+      let initialCondition;
 
       if (condition) {
         normalizedCondition = ensureRootBooleanOp(condition, preferredBooleanOp);
       } else {
-        let initialCondition = preferredCondition;
+        const isNewSearchForm = searchTermsGroup === SEARCH_TERMS_GROUP_LIMIT_BY
+          || searchTermsGroup === SEARCH_TERMS_GROUP_SEARCH_TERMS;
 
-        if (!initialCondition) {
+        // use preferred condition when not using new search form
+        if (!isNewSearchForm) {
+          initialCondition = preferredCondition;
+        }
+
+        // use config condition when there is no preferred condition
+        // and not using new search form or for new search terms group when is broad search
+        if (
+          !initialCondition && (
+            !isNewSearchForm
+            || (searchTermsGroup === SEARCH_TERMS_GROUP_SEARCH_TERMS
+              && isBroadSearch)
+          )
+        ) {
           initialCondition = Immutable.fromJS(
             get(config, ['recordTypes', recordType, 'advancedSearch']),
           );
@@ -146,12 +170,17 @@ export default class AdvancedSearchBuilder extends Component {
       inline,
       readOnly,
       recordType,
+      withoutPanel,
+      searchTermsGroup,
+      isBroadSearch,
     } = this.props;
 
     if (!condition) {
       return null;
     }
 
+    const isNewSearchForm = searchTermsGroup === SEARCH_TERMS_GROUP_LIMIT_BY
+      || searchTermsGroup === SEARCH_TERMS_GROUP_SEARCH_TERMS;
     const SearchConditionInputComponent = getSearchConditionInputComponent(condition);
 
     const searchConditionInput = (
@@ -162,15 +191,17 @@ export default class AdvancedSearchBuilder extends Component {
         inline={inline}
         name="advancedSearch"
         readOnly={readOnly}
+        isNewSearchForm={isNewSearchForm}
         recordType={recordType}
         showInlineParens={false}
         showRemoveButton={false}
+        showMiniButtonFooter={!(isBroadSearch && isNewSearchForm)}
         getSearchConditionInputComponent={getSearchConditionInputComponent}
         onCommit={this.handleConditionCommit}
       />
     );
 
-    if (inline) {
+    if (inline || withoutPanel) {
       return searchConditionInput;
     }
 

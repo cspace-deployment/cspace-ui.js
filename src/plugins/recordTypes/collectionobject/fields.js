@@ -1589,6 +1589,34 @@ export default (configContext) => {
             },
           },
         },
+        controlledContentPlaces: {
+          [config]: {
+            view: {
+              type: CompoundInput,
+            },
+          },
+          controlledContentPlace: {
+            [config]: {
+              messages: defineMessages({
+                fullName: {
+                  id: 'field.collectionobjects_common.controlledContentPlace.fullName',
+                  defaultMessage: 'Content place (controlled)',
+                },
+                name: {
+                  id: 'field.collectionobjects_common.controlledContentPlace.name',
+                  defaultMessage: 'Place (controlled)',
+                },
+              }),
+              repeating: true,
+              view: {
+                type: AutocompleteInput,
+                props: {
+                  source: 'place/local',
+                },
+              },
+            },
+          },
+        },
         contentPlaces: {
           [config]: {
             view: {
@@ -2626,6 +2654,27 @@ export default (configContext) => {
               type: TextInput,
               props: {
                 multiline: true,
+              },
+            },
+          },
+        },
+        objectProductionAgents: {
+          [config]: {
+            view: {
+              type: CompoundInput,
+            },
+          },
+          objectProductionAgent: {
+            [config]: {
+              messages: defineMessages({
+                name: {
+                  id: 'field.collectionobjects_common.objectProductionAgent.name',
+                  defaultMessage: 'Production agent (verbatim)',
+                },
+              }),
+              repeating: true,
+              view: {
+                type: TextInput,
               },
             },
           },
@@ -3889,7 +3938,7 @@ export default (configContext) => {
             [config]: {
               messages: defineMessages({
                 name: {
-                  id: 'field.procedure.publishedRelatedLinkGroup.name',
+                  id: 'field.collectionobjects_common.publishedRelatedLinkGroup.name',
                   defaultMessage: 'Published related link',
                 },
               }),

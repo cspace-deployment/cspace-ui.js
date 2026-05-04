@@ -3,10 +3,13 @@ import { IntlProvider } from 'react-intl';
 import Immutable from 'immutable';
 import configureMockStore from 'redux-mock-store';
 import { Provider as StoreProvider } from 'react-redux';
+import * as axe from 'axe-core';
 import createTestContainer from '../../../helpers/createTestContainer';
 import { render } from '../../../helpers/renderHelpers';
 import VocabularyUsedByPanel from '../../../../src/components/admin/VocabularyUsedByPanel';
 import { configKey } from '../../../../src/helpers/configHelpers';
+import { OptionPickerInput, TermPickerInput } from '../../../../src/helpers/configContextInputs';
+import throwAxeViolationsError from '../../../helpers/utils';
 
 const { expect } = chai;
 
@@ -51,6 +54,23 @@ describe('VocabularyUsedByPanel', () => {
                 },
               },
               view: {
+                type: TermPickerInput,
+                props: {
+                  source: shortId,
+                },
+              },
+            },
+          },
+          field2: {
+            [configKey]: {
+              messages: {
+                name: {
+                  id: 'field2.name',
+                  defaultMessage: 'Field 2 - Wrong View Type',
+                },
+              },
+              view: {
+                type: OptionPickerInput,
                 props: {
                   source: shortId,
                 },
@@ -74,7 +94,7 @@ describe('VocabularyUsedByPanel', () => {
     this.container = createTestContainer(this);
   });
 
-  it('should render a panel', function test() {
+  it('should render a panel without a11y violations', async function test() {
     render(
       <IntlProvider locale="en">
         <StoreProvider store={store}>
@@ -84,6 +104,12 @@ describe('VocabularyUsedByPanel', () => {
     );
 
     this.container.querySelector('.cspace-layout-Panel--common').should.not.equal(null);
+
+    const results = await axe.run(this.container);
+    if (results.violations.length > 0) {
+      throwAxeViolationsError(results.violations);
+    }
+    results.violations.length.should.equal(0);
   });
 
   it('should render a list of uses', function test() {
@@ -100,7 +126,9 @@ describe('VocabularyUsedByPanel', () => {
     list.should.not.equal(null);
 
     list.querySelector('li > div').textContent.should.equal('Group');
-    list.querySelector('li > ul > li').textContent.should.equal('Field 1');
+    const fields = list.querySelectorAll('li > ul > li');
+    fields.length.should.equal(1);
+    fields[0].textContent.should.equal('Field 1');
   });
 
   it('should render a not used message if no uses are found', function test() {

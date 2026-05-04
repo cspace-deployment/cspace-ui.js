@@ -1,0 +1,30 @@
+@value buttonBg from '../colors.css';
+@value inputHeight from '../dimensions.css';
+
+.flex {
+  display: flex;
+  margin-right: inputHeight;
+}
+
+.mt2 {
+  margin-top: 2px;
+}
+
+.mr5 {
+  margin-right: 5px;
+}
+
+.flex input {
+  height: calc(inputHeight + 1px);
+}
+
+/* Override the SearchResultSummary button styling */
+.flex button {
+  height: calc(inputHeight + 1px);
+  width: calc(inputHeight + 1px);
+  border-radius: 0 3px 3px 0;
+  background-color: buttonBg;
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}

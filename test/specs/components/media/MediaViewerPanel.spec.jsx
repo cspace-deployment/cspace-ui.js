@@ -124,7 +124,7 @@ describe('MediaViewerPanel', () => {
     shallowRenderer.render(
       <MediaViewerPanel
         config={config}
-        ownBlobCsid="84471689-9a99-4687-9c66"
+        ownFields={{ ownBlobCsid: '84471689-9a99-4687-9c66' }}
         searchDescriptor={searchDescriptor}
         searchResult={searchResult}
       />,
@@ -142,7 +142,7 @@ describe('MediaViewerPanel', () => {
     shallowRenderer.render(
       <MediaViewerPanel
         config={config}
-        ownBlobCsid="/blob"
+        ownFields={{ ownBlobCsid: '/blob' }}
         searchDescriptor={searchDescriptor}
         searchResult={searchResult}
       />,
@@ -158,16 +158,14 @@ describe('MediaViewerPanel', () => {
     let searchedConfig = null;
     let searchedSearchName = null;
     let searchedSearchDescriptor = null;
-    let searchedListType = null;
     let searchedColumnSetName = null;
 
     const search = (
-      configArg, searchNameArg, searchDescriptorArg, listTypeArg, columnSetNameArg,
+      configArg, searchNameArg, searchDescriptorArg, columnSetNameArg,
     ) => {
       searchedConfig = configArg;
       searchedSearchName = searchNameArg;
       searchedSearchDescriptor = searchDescriptorArg;
-      searchedListType = listTypeArg;
       searchedColumnSetName = columnSetNameArg;
     };
 
@@ -185,7 +183,6 @@ describe('MediaViewerPanel', () => {
     searchedConfig.should.equal(config);
     searchedSearchName.should.equal(searchName);
     searchedSearchDescriptor.should.equal(searchDescriptor);
-    searchedListType.should.equal('common');
     searchedColumnSetName.should.equal('default');
   });
 
@@ -193,16 +190,14 @@ describe('MediaViewerPanel', () => {
     let searchedConfig = null;
     let searchedSearchName = null;
     let searchedSearchDescriptor = null;
-    let searchedListType = null;
     let searchedColumnSetName = null;
 
     const search = (
-      configArg, searchNameArg, searchDescriptorArg, listTypeArg, columnSetNameArg,
+      configArg, searchNameArg, searchDescriptorArg, columnSetNameArg,
     ) => {
       searchedConfig = configArg;
       searchedSearchName = searchNameArg;
       searchedSearchDescriptor = searchDescriptorArg;
-      searchedListType = listTypeArg;
       searchedColumnSetName = columnSetNameArg;
     };
 
@@ -239,7 +234,6 @@ describe('MediaViewerPanel', () => {
     searchedConfig.should.equal(config);
     searchedSearchName.should.equal(searchName);
     searchedSearchDescriptor.should.equal(newSearchDescriptor);
-    searchedListType.should.equal('common');
     searchedColumnSetName.should.equal('default');
   });
 });

@@ -255,6 +255,10 @@ const template = (configContext) => {
                 <Field name="contentPerson" />
               </Field>
 
+              <Field name="controlledContentPlaces">
+                <Field name="controlledContentPlace" />
+              </Field>
+
               <Field name="contentPlaces">
                 <Field name="contentPlace" />
               </Field>
@@ -395,6 +399,10 @@ const template = (configContext) => {
                 <Field name="objectProductionOrganization" />
                 <Field name="objectProductionOrganizationRole" />
               </Field>
+            </Field>
+
+            <Field name="objectProductionAgents">
+              <Field name="objectProductionAgent" />
             </Field>
 
             <Field name="objectProductionNote" />
