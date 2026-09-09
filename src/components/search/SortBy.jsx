@@ -48,7 +48,10 @@ function SortBy({
   } = sortConfig;
 
   const options = Object.keys(sortConfig)
-    .filter((key) => sortConfig[key].sortBy !== undefined)
+    .filter((key) => {
+      const option = sortConfig[key];
+      return option && typeof option === 'object' && option.sortBy !== undefined && !option.disabled;
+    })
     .map((key) => {
       const option = sortConfig[key];
       const label = intl.formatMessage(option.messages.label) ?? key;
