@@ -2,10 +2,12 @@ import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import qs from 'qs';
+import styles from '../../../../styles/cspace-ui/SearchTable.css';
 
 const propTypes = {
   column: PropTypes.shape({
     dataKey: PropTypes.string,
+    sortable: PropTypes.bool,
     formatValue: PropTypes.func,
     label: PropTypes.func,
   }),
@@ -55,8 +57,21 @@ export default function SearchResultTableHeader({ column, sort }) {
     );
   }
 
+  if (!column.sortable) {
+    return (
+      <th style={{ textAlign: 'left' }}>
+        {column.label()}
+      </th>
+    );
+  }
+
   return (
-    <th style={{ textAlign: 'left' }} onClick={() => handleSortChange()} tabIndex={0}>
+    <th
+      className={styles.sortable}
+      style={{ textAlign: 'left' }}
+      onClick={() => handleSortChange()}
+      tabIndex={0}
+    >
       {column.label()}
       {arrow}
     </th>

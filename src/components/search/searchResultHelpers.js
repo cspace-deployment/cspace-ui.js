@@ -71,3 +71,55 @@ export function readListItems(config, listType, searchResult) {
     items,
   };
 }
+
+/**
+ * Get the value of a column from a list item. The dataKey may be a single key, or a pipe-separated
+ * list of keys to try in order (e.g. 'objectName|title|taxon'); the value of the first key that
+ * has a non-empty value is returned. If no key has a value, null is returned.
+ *
+ * @param {Immutable.Map} item The list item
+ * @param {string} dataKey     The column data key, possibly pipe-separated
+ * @returns The value for the column, or null
+ */
+export function getItemValue(item, dataKey) {
+  if (!item || !dataKey) {
+    return null;
+  }
+
+  const keys = dataKey.split('|');
+
+  for (let i = 0; i < keys.length; i += 1) {
+    const value = item.get(keys[i]);
+
+    if (value) {
+      return value;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Determine if a column can be sorted on for a given search. A column is sortable if the search
+ * action can resolve its name to a services sortBy, either through the record type's sort config or
+ * through the column's own sortBy. As in SearchResultTable, a field in a repeating group can't be
+ * sorted on when searching for related records.
+ *
+ * @param {object} config           The cspace config
+ * @param {object} searchDescriptor The search descriptor for the current search
+ * @param {string} columnName       The column name
+ * @param {string} columnSetName    The column set, e.g. default, narrow, etc
+ * @returns true if the column is sortable; false otherwise
+ */
+export function isColumnSortable(config, searchDescriptor, columnName, columnSetName = 'default') {
+  const recordType = searchDescriptor.get('recordType');
+
+  const sortBy = get(config, ['recordTypes', recordType, 'sort', columnName, 'sortBy'])
+    || get(config, ['recordTypes', recordType, 'columns', columnSetName, columnName, 'sortBy']);
+
+  if (!sortBy) {
+    return false;
+  }
+
+  return (!searchDescriptor.getIn(['searchQuery', 'rel']) || sortBy.indexOf('/0/') === -1);
+}
