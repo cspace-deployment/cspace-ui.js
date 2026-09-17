@@ -101,9 +101,9 @@ export function getItemValue(item, dataKey) {
 
 /**
  * Determine if a column can be sorted on for a given search. A column is sortable if the search
- * action can resolve its name to a services sortBy, either through the record type's sort config or
- * through the column's own sortBy. As in SearchResultTable, a field in a repeating group can't be
- * sorted on when searching for related records.
+ * action can resolve its name to a services sortBy, either through the column's own sortBy or
+ * through the record type's sort config. As in SearchResultTable, a field in a repeating group
+ * can't be sorted on when searching for related records.
  *
  * @param {object} config           The cspace config
  * @param {object} searchDescriptor The search descriptor for the current search
@@ -114,8 +114,11 @@ export function getItemValue(item, dataKey) {
 export function isColumnSortable(config, searchDescriptor, columnName, columnSetName = 'default') {
   const recordType = searchDescriptor.get('recordType');
 
-  const sortBy = get(config, ['recordTypes', recordType, 'sort', columnName, 'sortBy'])
-    || get(config, ['recordTypes', recordType, 'columns', columnSetName, columnName, 'sortBy']);
+  // Same precedence as getSortParam in actions/search.js: the column's own sortBy first, then
+  // the record type's sort config.
+  const sortBy = get(config,
+    ['recordTypes', recordType, 'columns', columnSetName, columnName, 'sortBy'])
+    || get(config, ['recordTypes', recordType, 'sort', columnName, 'sortBy']);
 
   if (!sortBy) {
     return false;
