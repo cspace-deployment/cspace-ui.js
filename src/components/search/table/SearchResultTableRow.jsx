@@ -7,6 +7,7 @@ import { useConfig } from '../../config/ConfigProvider';
 import { SEARCH_RESULT_PAGE_SEARCH_NAME } from '../../../constants/searchNames';
 import styles from '../../../../styles/cspace-ui/SearchTable.css';
 import SearchResultCheckbox from '../SearchResultCheckbox';
+import { getItemValue } from '../searchResultHelpers';
 
 const propTypes = {
   item: PropTypes.instanceOf(Immutable.Map),
@@ -30,14 +31,14 @@ const messages = defineMessages({
 });
 
 function renderColumn(column, item) {
-  const data = item.get(column.dataKey);
+  const data = getItemValue(item, column.dataKey);
   const formatted = data ? column.formatValue(data) : null;
   const key = `${item.get('csid')}-${column.dataKey}`;
   return <td key={key}>{formatted}</td>;
 }
 
 function createRowLabel(column, item, index, total, intl) {
-  const data = item.get(column.dataKey);
+  const data = getItemValue(item, column.dataKey);
   return data
     ? intl.formatMessage(messages.rowAriaLabel,
       { primary: data, index: index + 1, total })
