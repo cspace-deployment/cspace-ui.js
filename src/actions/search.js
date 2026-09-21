@@ -33,19 +33,21 @@ const getSortParam = (config, searchDescriptor, columnSetName) => {
     return null;
   }
 
-  // prefer the new sort.js config
-  const sort = get(config,
-    ['recordTypes', searchDescriptor.get('recordType'), 'sort', sortColumnName]);
-
-  if (sort && sort.sortBy) {
-    return sort.sortBy + (sortDir ? ' DESC' : '');
-  }
-
+  // Prefer the column's own sortBy, so that profile plugins that override it (e.g. a
+  // sortable object number) keep working as they did before the sort.js config existed.
   const column = get(config,
     ['recordTypes', searchDescriptor.get('recordType'), 'columns', columnSetName, sortColumnName]);
 
   if (column && column.sortBy) {
     return (column.sortBy + (sortDir ? ' DESC' : ''));
+  }
+
+  // Fall back to the sort.js config, which may define sort options that aren't columns.
+  const sort = get(config,
+    ['recordTypes', searchDescriptor.get('recordType'), 'sort', sortColumnName]);
+
+  if (sort && sort.sortBy) {
+    return sort.sortBy + (sortDir ? ' DESC' : '');
   }
 
   return null;

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import get from 'lodash/get';
 import Immutable from 'immutable';
 import SearchResultTableHeader from './SearchResultTableHeader';
-import { getColumnConfig, readListItems } from '../searchResultHelpers';
+import { getColumnConfig, isColumnSortable, readListItems } from '../searchResultHelpers';
 import { getSearchResult, getSearchSelectedItems } from '../../../reducers';
 import { SEARCH_RESULT_PAGE_SEARCH_NAME } from '../../../constants/searchNames';
 import { useConfig } from '../../config/ConfigProvider';
@@ -95,6 +95,7 @@ function SearchResultTable({ searchDescriptor, intl }) {
       const column = columnConfig[name];
       return {
         dataKey: column.dataKey || name,
+        sortable: isColumnSortable(config, searchDescriptor, name),
         formatValue: (data) => {
           if (column.formatValue) {
             const formatterContext = {
