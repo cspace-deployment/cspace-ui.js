@@ -20,14 +20,6 @@ const messages = defineMessages({
     id: 'footer.about',
     defaultMessage: 'Visit the CollectionSpace Website',
   },
-  feedback: {
-    id: 'footer.feedback',
-    defaultMessage: 'Share Feedback with the CollectionSpace Program',
-  },
-  feedbackUrl: {
-    id: 'footer.feedbackUrl',
-    defaultMessage: 'https://www.collectionspace.org/contact',
-  },
   release: {
     id: 'footer.release',
     defaultMessage: 'Release {version}',
@@ -253,12 +245,6 @@ export default function Footer(props) {
         <li>
           <a target="_blank" rel="noreferrer" href="https://www.collectionspace.org">
             <FormattedMessage {...messages.about} />
-          </a>
-        </li>
-
-        <li>
-          <a target="_blank" rel="noreferrer" href={intl.formatMessage(messages.feedbackUrl)}>
-            <FormattedMessage {...messages.feedback} />
           </a>
         </li>
       </ul>

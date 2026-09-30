@@ -5399,10 +5399,6 @@ export default {
 
   "footer.documentation": "Access the CollectionSpace Documentation",
 
-  "footer.feedback": "Share Feedback with the CollectionSpace Program",
-
-  "footer.feedbackUrl": "https://www.collectionspace.org/contact",
-
   // Message shown in the footer when a connection to the CollectionSpace server can not be established.
   "footer.notConnected": "Not connected to {serverUrl}",
 
